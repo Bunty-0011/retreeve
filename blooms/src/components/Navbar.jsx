@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/logo.png";
 import LogoutBtn from "./LogoutBtn";
-
 import { setTopicQuery } from "../features/searchSlice";
 
 export default function Navbar() {
@@ -15,29 +14,34 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
 
-  
-
-  
-  //  Updated search submit
+  // ✅ Search submit
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const trimmed = search.trim();
     if (trimmed) {
-      dispatch(setTopicQuery(trimmed)); // store in redux
-      navigate(`/search?q=${encodeURIComponent(trimmed)}`); 
-      setSearch(""); // clear input
+      dispatch(setTopicQuery(trimmed));
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+      setSearch("");
+    }
+  };
+
+  // ✅ Smooth scroll to section
+  const handleScroll = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const navItems = [
-    { name: "Home", slug: "/", active: !authStatus },
-    { name: "Features", slug: "/", active: !authStatus },
-    { name: "How it Works", slug: "/", active: !authStatus },
-    { name: "Contact Us", slug: "/", active: !authStatus },
-    { name: "Sign In", slug: "/signin", active: !authStatus },
-    { name: "Sign Up", slug: "/signup", active: !authStatus },
-    { name: "Dashboard", slug: "/dashboard", active: authStatus },
-    { name: "My Topics", slug: "/mytopics", active: authStatus },
+    { name: "Home", slug: "/", type: "link", active: !authStatus },
+    { name: "Features", slug: "features", type: "scroll", active: !authStatus },
+    { name: "How it Works", slug: "how-it-works", type: "scroll", active: !authStatus },
+    { name: "Contact Us", slug: "contact", type: "scroll", active: !authStatus },
+    { name: "Sign In", slug: "/signin", type: "link", active: !authStatus },
+    { name: "Sign Up", slug: "/signup", type: "link", active: !authStatus },
+    { name: "Dashboard", slug: "/dashboard", type: "link", active: authStatus },
+    { name: "My Topics", slug: "/mytopics", type: "link", active: authStatus },
   ];
 
   const showSearch =
@@ -62,25 +66,29 @@ export default function Navbar() {
               (i) =>
                 i.active && (
                   <li key={i.name}>
-                    <button
-                      onClick={() => navigate(i.slug)}
-                      className="px-4 py-2 duration-200 hover:bg-gray-200 rounded-full text-gray-700"
-                    >
-                      {i.name}
-                    </button>
+                    {i.type === "link" ? (
+                      <button
+                        onClick={() => navigate(i.slug)}
+                        className="px-4 py-2 duration-200 hover:bg-gray-200 rounded-full text-gray-700"
+                      >
+                        {i.name}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleScroll(i.slug)}
+                        className="px-4 py-2 duration-200 hover:bg-gray-200 rounded-full text-gray-700"
+                      >
+                        {i.name}
+                      </button>
+                    )}
                   </li>
                 )
             )}
 
-            
-
             {/* Search Bar */}
             {showSearch && (
               <li>
-                <form
-                  onSubmit={handleSearchSubmit}
-                  className="flex items-center"
-                >
+                <form onSubmit={handleSearchSubmit} className="flex items-center">
                   <input
                     type="text"
                     placeholder="Search topics..."
@@ -108,6 +116,10 @@ export default function Navbar() {
                 <LogoutBtn />
               </li>
             )}
+
+           
+           
+
           </ul>
         </div>
       </div>

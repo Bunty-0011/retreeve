@@ -41,4 +41,8 @@
     top: 35%;
     left: 68%;
   }
+  html {
+    scroll-behavior: smooth;
+  }
+  
   
