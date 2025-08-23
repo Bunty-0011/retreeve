@@ -3,13 +3,17 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 
 // Pages
+// Pages
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import UserDashboard from "./pages/UserDashboard";
 import AddTopic from "./pages/AddTopic";
+import SearchTopics from "./pages/SearchTopics";
 import MyTopics from "./pages/MyTopics";
+import TopicDetail from "./pages/TopicDetail";
 import EditTopic from "./pages/EditTopic";
+import Notes from "./pages/Notes";
 
 
 // Components

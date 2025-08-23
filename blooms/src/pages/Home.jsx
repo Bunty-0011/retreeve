@@ -33,10 +33,10 @@ export default function Home() {
         <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
           <div className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
             <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-              Welcome to <span className="text-[#C2A37A]">Treeve</span>
+              Welcome to <span className="text-[#C2A37A]">Retreeve</span>
             </h1>
             <p className="mb-8 leading-relaxed">
-              Treeve is your personal learning companion, built on spaced repetition —
+              Treeve is your personal learning companion, built on spaced repetition 
               a proven technique that helps you remember information far longer
               than traditional study methods.
             </p>
@@ -114,10 +114,10 @@ export default function Home() {
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-semibold text-gray-900 mb-6">Contact Us</h2>
           <p className="text-lg text-gray-700 mb-4">
-            📧 Email: <a href="mailto:support@treeve.com" className="text-[#C2A37A] hover:underline">support@treeve.com</a>
+            📧 Email: <a href="mailto:support@retreeve.com" className="text-[#C2A37A] hover:underline">support@treeve.com</a>
           </p>
           <p className="text-lg text-gray-700">
-            📱 Mobile: <a href="tel:+919876543210" className="text-[#C2A37A] hover:underline">+91 98765 43210</a>
+            📱 Mobile: <a href="tel:+############" className="text-[#C2A37A] hover:underline">+91 98765 43210</a>
           </p>
         </div>
       </section>
