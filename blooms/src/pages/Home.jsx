@@ -9,13 +9,13 @@ export default function Home() {
       className="relative min-h-screen bg-fixed bg-center bg-cover overflow-hidden"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* Beige Overlay */}
+    
       <div className="absolute inset-0 bg-[#EEE2D4]/70"></div>
 
-      {/* Decorative Elements */}
+    
       
 
-      {/* Hero Section from Tailblocks */}
+      
       <section className="text-gray-600 body-font relative z-10">
         <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
           <div className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
