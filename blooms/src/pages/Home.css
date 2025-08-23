@@ -1,0 +1,44 @@
+.how-it-works-container {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .image-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .how-image {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .step {
+    position: absolute;
+    width: 20%;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #5a5a5a;
+  }
+  
+  .step1 {
+    top: 35%;
+    left: 12%;
+  }
+  
+  .step2 {
+    top: 35%;
+    left: 40%;
+  }
+  
+  .step3 {
+    top: 35%;
+    left: 68%;
+  }
+  
