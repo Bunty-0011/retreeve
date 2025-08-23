@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/logo.png";
+import LogoutBtn from "./LogoutBtn";
 
+import { setTopicQuery } from "../features/searchSlice"; 
 
 export default function Navbar() {
   const authStatus = useSelector((s) => s.user.isLoggedIn);
@@ -10,23 +12,20 @@ export default function Navbar() {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  
-
-  
-
-  
+  const dispatch = useDispatch(); 
+ 
 
   const navItems = [
     { name: "Home", slug: "/", active: !authStatus },
     { name: "Features", slug: "/", active: !authStatus },
     { name: "How it Works", slug: "/", active: !authStatus },
     { name: "Contact Us", slug: "/", active: !authStatus },
+    { name: "Sign In", slug: "/signin", active: !authStatus },
+    { name: "Sign Up", slug: "/signup", active: !authStatus },
     
   ];
 
-  const showSearch =
-    authStatus &&
-    (pathname.startsWith("/dashboard") || pathname.startsWith("/mytopics"));
+
 
   return (
     <nav className="bg-[#f6f2ec] shadow-sm sticky top-0 z-50">
@@ -55,7 +54,6 @@ export default function Navbar() {
                   </li>
                 )
             )}
-
           </ul>
         </div>
       </div>
