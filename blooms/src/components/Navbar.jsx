@@ -8,7 +8,7 @@ import {
   subscribeToNotifications,
   markAsRead,
 } from "../appwrite/notification_service";
-import { setTopicQuery } from "../features/searchSlice"; // ✅ import action
+import { setTopicQuery } from "../features/searchSlice";
 
 export default function Navbar() {
   const authStatus = useSelector((s) => s.user.isLoggedIn);
@@ -16,14 +16,14 @@ export default function Navbar() {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const dispatch = useDispatch(); // ✅ setup dispatch
+  const dispatch = useDispatch(); 
   const [search, setSearch] = useState("");
 
   const [notifications, setNotifications] = useState([]);
   const [showNotif, setShowNotif] = useState(false);
   const notifRef = useRef();
 
-  // ✅ Fetch initial notifications & subscribe
+
   useEffect(() => {
     if (!authStatus || !user) return;
 
@@ -31,7 +31,7 @@ export default function Navbar() {
 
     (async () => {
       try {
-        const initial = await getUserNotifications(user.$id); // service auto-filters by current user
+        const initial = await getUserNotifications(user.$id); 
         setNotifications(initial || []);
       } catch (err) {
         console.error("Error fetching notifications:", err);
@@ -47,7 +47,7 @@ export default function Navbar() {
     };
   }, [authStatus, user]);
 
-  // ✅ Close popup when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (notifRef.current && !notifRef.current.contains(e.target)) {
@@ -71,14 +71,14 @@ export default function Navbar() {
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  // ✅ Updated search submit
+  
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const trimmed = search.trim();
     if (trimmed) {
-      dispatch(setTopicQuery(trimmed)); // ✅ store in redux
-      navigate(`/search?q=${encodeURIComponent(trimmed)}`); // ✅ push to URL
-      setSearch(""); // ✅ clear input
+      dispatch(setTopicQuery(trimmed)); 
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`); 
+      setSearch(""); 
     }
   };
 
