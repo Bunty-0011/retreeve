@@ -3,12 +3,9 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/logo.png";
 import LogoutBtn from "./LogoutBtn";
-<<<<<<< HEAD
 
-import { setTopicQuery } from "../features/searchSlice"; // ✅ import action
-=======
 import { setTopicQuery } from "../features/searchSlice";
->>>>>>> 1c9d825a8e5847bcb3bfe41d76007af3b94b2408
+
 
 export default function Navbar() {
   const authStatus = useSelector((s) => s.user.isLoggedIn);
@@ -16,29 +13,17 @@ export default function Navbar() {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-<<<<<<< HEAD
-  const dispatch = useDispatch(); // ✅ setup dispatch
-  const [search, setSearch] = useState("");
-
-  
-
   
   // ✅ Updated search submit
-=======
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
 
   // ✅ Search submit
->>>>>>> 1c9d825a8e5847bcb3bfe41d76007af3b94b2408
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const trimmed = search.trim();
     if (trimmed) {
-<<<<<<< HEAD
-      dispatch(setTopicQuery(trimmed)); // ✅ store in redux
-      navigate(`/search?q=${encodeURIComponent(trimmed)}`); // ✅ push to URL
-      setSearch(""); // ✅ clear input
-=======
+
       dispatch(setTopicQuery(trimmed));
       navigate(`/search?q=${encodeURIComponent(trimmed)}`);
       setSearch("");
@@ -50,21 +35,12 @@ export default function Navbar() {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
->>>>>>> 1c9d825a8e5847bcb3bfe41d76007af3b94b2408
+
     }
   };
 
   const navItems = [
-<<<<<<< HEAD
-    { name: "Home", slug: "/", active: !authStatus },
-    { name: "Features", slug: "/", active: !authStatus },
-    { name: "How it Works", slug: "/", active: !authStatus },
-    { name: "Contact Us", slug: "/", active: !authStatus },
-    { name: "Sign In", slug: "/signin", active: !authStatus },
-    { name: "Sign Up", slug: "/signup", active: !authStatus },
-    { name: "Dashboard", slug: "/dashboard", active: authStatus },
-    { name: "My Topics", slug: "/mytopics", active: authStatus },
-=======
+
     { name: "Home", slug: "/", type: "link", active: !authStatus },
     { name: "Features", slug: "features", type: "scroll", active: !authStatus },
     { name: "How it Works", slug: "how-it-works", type: "scroll", active: !authStatus },
@@ -73,7 +49,6 @@ export default function Navbar() {
     { name: "Sign Up", slug: "/signup", type: "link", active: !authStatus },
     { name: "Dashboard", slug: "/dashboard", type: "link", active: authStatus },
     { name: "My Topics", slug: "/mytopics", type: "link", active: authStatus },
->>>>>>> 1c9d825a8e5847bcb3bfe41d76007af3b94b2408
   ];
 
   const showSearch =
@@ -117,22 +92,11 @@ export default function Navbar() {
                 )
             )}
 
-<<<<<<< HEAD
-            
-
-            {/* Search Bar */}
-            {showSearch && (
-              <li>
-                <form
-                  onSubmit={handleSearchSubmit}
-                  className="flex items-center"
-                >
-=======
             {/* Search Bar */}
             {showSearch && (
               <li>
                 <form onSubmit={handleSearchSubmit} className="flex items-center">
->>>>>>> 1c9d825a8e5847bcb3bfe41d76007af3b94b2408
+
                   <input
                     type="text"
                     placeholder="Search topics..."
@@ -160,13 +124,6 @@ export default function Navbar() {
                 <LogoutBtn />
               </li>
             )}
-<<<<<<< HEAD
-=======
-
-           
-           
-
->>>>>>> 1c9d825a8e5847bcb3bfe41d76007af3b94b2408
           </ul>
         </div>
       </div>
