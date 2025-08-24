@@ -22,8 +22,8 @@ async function callOllama(prompt) {
     throw new Error(`Ollama request failed: ${response.statusText}`);
   }
 
-  const data = await response.json();
-  return data;
+  return await response.json();
+  
 }
 
 class ReviewService {
@@ -49,15 +49,27 @@ Return ONLY JSON array of objects:
       const ollamaData = await callOllama(prompt);
     
       let test;
-      try {
-        test = JSON.parse((ollamaData.response).json() || "[]");
-        if (!Array.isArray(test) || test.length === 0) throw new Error("Empty test");
-      } catch {
-        console.warn("⚠️ Model did not return valid JSON, fallback used.");
-        test = [{ question: ollamaData.response || "No question generated", options: [], answer: "" }];
-      }
+try {
+  // Try parsing JSON directly
+  test = JSON.parse(ollamaData.response || "[]");
 
-      test = test.map((q, idx) => ({ id: `q${idx + 1}`, ...q }));
+  if (!Array.isArray(test) || test.length === 0) {
+    throw new Error("Empty test");
+  }
+} catch {
+  console.warn("⚠️ Model did not return valid JSON, fallback used.");
+  test = [
+    {
+      id: "q1",
+      question: ollamaData.response || "No question generated",
+      options: [],
+      answer: "",
+    },
+  ];
+}
+
+// Always attach IDs
+test = test.map((q, idx) => ({ id: `q${idx + 1}`, ...q }));
 
       const sessionDoc = await databases.createDocument(
         conf.appwriteDatabaseId,
@@ -114,15 +126,27 @@ Return ONLY JSON array of objects:
       const ollamaData = await callOllama(prompt);
 
       let test;
-      try {
-        test = JSON.parse(ollamaData.response || "[]");
-        if (!Array.isArray(test) || test.length === 0) throw new Error("Empty test");
-      } catch {
-        console.warn("⚠️ Model did not return valid JSON, fallback used.");
-        test = [{ question: ollamaData.response || "No question generated", options: [], answer: "" }];
-      }
+try {
+  // Try parsing JSON directly
+  test = JSON.parse(ollamaData.response || "[]");
 
-      test = test.map((q, idx) => ({ id: `q${idx + 1}`, ...q }));
+  if (!Array.isArray(test) || test.length === 0) {
+    throw new Error("Empty test");
+  }
+} catch {
+  console.warn("⚠️ Model did not return valid JSON, fallback used.");
+  test = [
+    {
+      id: "q1",
+      question: ollamaData.response || "No question generated",
+      options: [],
+      answer: "",
+    },
+  ];
+}
+
+// Always attach IDs
+test = test.map((q, idx) => ({ id: `q${idx + 1}`, ...q }));
 
       const sessionDoc = await databases.createDocument(
         conf.appwriteDatabaseId,
