@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/logo.png";
 import LogoutBtn from "./LogoutBtn";
-
-import { setTopicQuery } from "../features/searchSlice";
+import {
+  getUserNotifications,
+  subscribeToNotifications,
+  markAsRead,
+} from "../appwrite/notification_service";
+import { setTopicQuery } from "../features/searchSlice"; // ✅ import action
 
 
 export default function Navbar() {
@@ -13,42 +17,81 @@ export default function Navbar() {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  
-  // ✅ Updated search submit
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // ✅ setup dispatch
   const [search, setSearch] = useState("");
 
-  // ✅ Search submit
+  const [notifications, setNotifications] = useState([]);
+  const [showNotif, setShowNotif] = useState(false);
+  const notifRef = useRef();
+
+  // ✅ Fetch initial notifications & subscribe
+  useEffect(() => {
+    if (!authStatus || !user) return;
+
+    let unsubscribe = null;
+
+    (async () => {
+      try {
+        const initial = await getUserNotifications(user.$id); // service auto-filters by current user
+        setNotifications(initial || []);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+
+      unsubscribe = subscribeToNotifications(user.$id, (doc) => {
+        setNotifications((prev) => [doc, ...prev]);
+      });
+    })();
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [authStatus, user]);
+
+  // ✅ Close popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotif(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleMarkAsRead = async (id) => {
+    try {
+      await markAsRead(id);
+      setNotifications((prev) =>
+        prev.map((n) => (n.$id === id ? { ...n, isRead: true } : n))
+      );
+    } catch (err) {
+      console.error("Failed to mark notification as read:", err);
+    }
+  };
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  // ✅ Updated search submit
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const trimmed = search.trim();
     if (trimmed) {
-
-      dispatch(setTopicQuery(trimmed));
-      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
-      setSearch("");
-    }
-  };
-
-  // ✅ Smooth scroll to section
-  const handleScroll = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-
+      dispatch(setTopicQuery(trimmed)); // ✅ store in redux
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`); // ✅ push to URL
+      setSearch(""); // ✅ clear input
     }
   };
 
   const navItems = [
-
-    { name: "Home", slug: "/", type: "link", active: !authStatus },
-    { name: "Features", slug: "features", type: "scroll", active: !authStatus },
-    { name: "How it Works", slug: "how-it-works", type: "scroll", active: !authStatus },
-    { name: "Contact Us", slug: "contact", type: "scroll", active: !authStatus },
-    { name: "Sign In", slug: "/signin", type: "link", active: !authStatus },
-    { name: "Sign Up", slug: "/signup", type: "link", active: !authStatus },
-    { name: "Dashboard", slug: "/dashboard", type: "link", active: authStatus },
-    { name: "My Topics", slug: "/mytopics", type: "link", active: authStatus },
+    { name: "Home", slug: "/", active: !authStatus },
+    { name: "Features", slug: "/", active: !authStatus },
+    { name: "How it Works", slug: "/", active: !authStatus },
+    { name: "Contact Us", slug: "/", active: !authStatus },
+    { name: "Sign In", slug: "/signin", active: !authStatus },
+    { name: "Sign Up", slug: "/signup", active: !authStatus },
+    { name: "Dashboard", slug: "/dashboard", active: authStatus },
+    { name: "My Topics", slug: "/mytopics", active: authStatus },
   ];
 
   const showSearch =
@@ -73,30 +116,82 @@ export default function Navbar() {
               (i) =>
                 i.active && (
                   <li key={i.name}>
-                    {i.type === "link" ? (
-                      <button
-                        onClick={() => navigate(i.slug)}
-                        className="px-4 py-2 duration-200 hover:bg-gray-200 rounded-full text-gray-700"
-                      >
-                        {i.name}
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleScroll(i.slug)}
-                        className="px-4 py-2 duration-200 hover:bg-gray-200 rounded-full text-gray-700"
-                      >
-                        {i.name}
-                      </button>
-                    )}
+                    <button
+                      onClick={() => navigate(i.slug)}
+                      className="px-4 py-2 duration-200 hover:bg-gray-200 rounded-full text-gray-700"
+                    >
+                      {i.name}
+                    </button>
                   </li>
                 )
+            )}
+
+            {/* 🔔 Notification Bell */}
+            {authStatus && (
+              <li className="relative" ref={notifRef}>
+                <button
+                  onClick={() => setShowNotif((prev) => !prev)}
+                  className="relative px-4 py-2 duration-200 hover:bg-gray-200 rounded-full text-gray-700"
+                >
+                  🔔
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+
+                {/* Notification Popup */}
+                {showNotif && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-50">
+                    <h3 className="font-semibold p-3 border-b">Notifications</h3>
+                    <div className="max-h-64 overflow-y-auto">
+                      {notifications.length ? (
+                        notifications.map((n) => (
+                          <div
+                            key={n.$id}
+                            className={`p-3 border-b flex justify-between items-center ${
+                              n.isRead ? "bg-gray-50" : "bg-white"
+                            }`}
+                          >
+                            <div>
+                              <p
+                                className={`${
+                                  n.isRead ? "text-gray-500" : "font-semibold"
+                                }`}
+                              >
+                                {n.message || "New notification"}
+                              </p>
+                              <p className="text-xs text-gray-400">
+                                {new Date(n.$createdAt).toLocaleString()}
+                              </p>
+                            </div>
+                            {!n.isRead && (
+                              <button
+                                onClick={() => handleMarkAsRead(n.$id)}
+                                className="text-blue-500 text-xs hover:underline ml-2"
+                              >
+                                Mark read
+                              </button>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        <p className="p-3 text-gray-500">No notifications</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </li>
             )}
 
             {/* Search Bar */}
             {showSearch && (
               <li>
-                <form onSubmit={handleSearchSubmit} className="flex items-center">
-
+                <form
+                  onSubmit={handleSearchSubmit}
+                  className="flex items-center"
+                >
                   <input
                     type="text"
                     placeholder="Search topics..."
