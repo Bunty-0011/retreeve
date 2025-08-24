@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import authService from "../appwrite/auth";// backend will create this
+import authService from "../appwrite/auth";
 import { logout } from "../features/userSlice";
 
 function LogoutBtn() {
@@ -11,7 +11,7 @@ function LogoutBtn() {
   const logoutHandler = () => {
     authService.logout().then(() => {
       dispatch(logout());
-      navigate("/");
+      navigate("/"); // ✅ redirect to home
     });
   };
 

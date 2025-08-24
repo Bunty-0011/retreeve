@@ -1,5 +1,5 @@
 import React, { useId, useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; 
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁 icons
 
 const Input = React.forwardRef(function Input(
   { label, type = "text", className = "", ...props },
@@ -8,6 +8,7 @@ const Input = React.forwardRef(function Input(
   const id = useId();
   const [showPassword, setShowPassword] = useState(false);
 
+  // If type is "password", allow toggle
   const inputType =
     type === "password" ? (showPassword ? "text" : "password") : type;
 
