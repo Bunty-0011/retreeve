@@ -8,7 +8,7 @@ const conf = {
     appwriteBucketId: String(import.meta.env.VITE_APPWRITE_BUCKET_ID),
     appwriteReviewSessionsCollectionId: String(import.meta.env.VITE_APPWRITE_REVIEW_SESSIONS_COLLECTION_ID),
     appwriteApiKey:import.meta.env.VITE_API_KEY,
-
+    appwriteUserProgressCollectionId:String(import.meta.env.VITE_APPWRITE_USER_PROGRESS_COLLECTION_ID),
     openApiKey:import.meta.env.OPEN_API_KEY,
     SMTP_USER: import.meta.env.VITE_SMTP_USER,
     SMTP_PASS: import.meta.env.VITE_SMTP_PASS

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import reviewService from "../appwrite/review_service";
-import topicService from "../appwrite/topic_service"; //  import service
+import topicService from "../appwrite/topic_service"; // ✅ import service
 import conf from "../conf/conf";
 import { Databases } from "appwrite";
 import { client } from "../appwrite/appwrite";
@@ -27,7 +27,7 @@ export default function TestPage() {
       try {
         const newSession = await reviewService.generateTest(id);
   
-        //  Safely handle both stringified JSON and array
+        // ✅ Safely handle both stringified JSON and array
         let parsedQ = [];
         try {
           if (typeof newSession?.questions === "string") {
@@ -62,6 +62,7 @@ export default function TestPage() {
     setAnswers((prev) => ({ ...prev, [qid]: value }));
   };
 
+  // ✅ Submit Test + Save Results in Topic
   const handleSubmit = async () => {
     if (!sessionId) {
       alert("No session found. Please retry.");
@@ -74,10 +75,10 @@ export default function TestPage() {
       setResult(res);
       setStatus("completed");
 
-      //  Append score to topic collection
+      // ✅ Append score to topic collection
       await topicService.appendTestResult(id, res.score, res.weaknesses);
     } catch (err) {
-      console.error(" Submit error:", err);
+      console.error("❌ Submit error:", err);
       alert("Failed to submit test");
     } finally {
       setSubmitting(false);
@@ -96,7 +97,7 @@ export default function TestPage() {
   
       const newSession = await reviewService.generateTest(id);
   
-      //  Safe parsing like in useEffect
+      // ✅ Safe parsing like in useEffect
       let parsedQ = [];
       try {
         if (typeof newSession?.questions === "string") {
@@ -203,7 +204,7 @@ export default function TestPage() {
               result.score >= 50 ? "text-green-600" : "text-red-600"
             }`}
           >
-            {result.score >= 50 ? "Passed" : " Failed"}
+            {result.score >= 50 ? "✅ Passed" : "❌ Failed"}
           </p>
 
           <div className="text-left mb-4">

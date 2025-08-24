@@ -10,6 +10,7 @@ import {
 } from "../appwrite/notification_service";
 import { setTopicQuery } from "../features/searchSlice"; // ✅ import action
 
+
 export default function Navbar() {
   const authStatus = useSelector((s) => s.user.isLoggedIn);
   const user = useSelector((s) => s.user.user);
