@@ -47,10 +47,10 @@ Return ONLY JSON array of objects:
 ]`;
 
       const ollamaData = await callOllama(prompt);
-
+    
       let test;
       try {
-        test = JSON.parse(ollamaData.response || "[]");
+        test = JSON.parse((ollamaData.response).json() || "[]");
         if (!Array.isArray(test) || test.length === 0) throw new Error("Empty test");
       } catch {
         console.warn("⚠️ Model did not return valid JSON, fallback used.");
