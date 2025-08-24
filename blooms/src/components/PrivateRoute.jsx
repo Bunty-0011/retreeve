@@ -1,8 +1,9 @@
+// PrivateRoute.jsx
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
 import authService from "../appwrite/auth";
-import { login, logout } from "../features/userSlice";
+import { login } from "../features/userSlice";
 
 export default function PrivateRoute({ children }) {
   const authStatus = useSelector((state) => state.user.isLoggedIn);
@@ -15,12 +16,9 @@ export default function PrivateRoute({ children }) {
         const user = await authService.getCurrentUser();
         if (user) {
           dispatch(login(user));
-        } else {
-          dispatch(logout());
         }
       } catch (err) {
-        console.error("Error in PrivateRoute:", err);
-        dispatch(logout()); 
+  dispatch(logout());
       } finally {
         setLoading(false);
       }
@@ -33,7 +31,7 @@ export default function PrivateRoute({ children }) {
   }
 
   if (!authStatus) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" replace />; // ✅ redirect to home
   }
 
   return children;
