@@ -114,10 +114,10 @@ export default function Home() {
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-semibold text-gray-900 mb-6">Contact Us</h2>
           <p className="text-lg text-gray-700 mb-4">
-            📧 Email: <a href="mailto:support@retreeve.com" className="text-[#C2A37A] hover:underline">support@treeve.com</a>
+            📧 Email: <a href="mailto:support@retreeve.com" className="text-[#C2A37A] hover:underline">support@retreeve.com</a>
           </p>
           <p className="text-lg text-gray-700">
-            📱 Mobile: <a href="tel:+############" className="text-[#C2A37A] hover:underline">+91 98765 43210</a>
+            📱 Mobile: <a href="tel:+############" className="text-[#C2A37A] hover:underline">+############</a>
           </p>
         </div>
       </section>
